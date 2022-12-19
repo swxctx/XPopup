@@ -845,6 +845,7 @@ public abstract class BasePopupView extends FrameLayout implements LifecycleObse
     public boolean onTouchEvent(MotionEvent event) {
         // 如果自己接触到了点击，并且不在PopupContentView范围内点击，则进行判断是否是点击事件,如果是，则dismiss
         Rect rect = new Rect();
+        boolean intercept = true;
         getPopupImplView().getGlobalVisibleRect(rect);
         if (!XPopupUtils.isInRect(event.getX(), event.getY(), rect)) {
             switch (event.getAction()) {
@@ -857,6 +858,7 @@ public abstract class BasePopupView extends FrameLayout implements LifecycleObse
                     if(popupInfo != null && popupInfo.isDismissOnTouchOutside) dismiss();
                     break;
                 case MotionEvent.ACTION_UP:
+                    intercept = false;
                 case MotionEvent.ACTION_CANCEL:
                     float dx = event.getX() - x;
                     float dy = event.getY() - y;
@@ -885,7 +887,7 @@ public abstract class BasePopupView extends FrameLayout implements LifecycleObse
                     break;
             }
         }
-        return true;
+        return intercept;
     }
 
 }
